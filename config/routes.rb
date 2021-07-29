@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :books
       resources :users
+      resources :sessions, only: [:create]
       get '/categories', to: 'categories#index'
     end
   end
