@@ -11,10 +11,37 @@ class Api::V1::BooksController < ApplicationController
             if book.save 
                 render json: {status: :created, data: book}
             else
-                render json: {status: :bad_request, message: book.errors}
+                render json: {status: :bad_request, message: book.errors[0]}
             end
         else 
             render json: {status: :bad_request, message: 'User or Category must be valid'}
+        end
+    end
+
+    def update 
+        book = Book.find_by(id: params[:id])
+
+        if book 
+            if book.update(book_params) 
+                render json: {status: :created, data: book}
+            else
+                render json: {status: :bad_request, message: book.errors[0]}
+            end
+        else
+            render json: {status: :bad_request, message: "No book was found with the given ID."}
+        end
+    end
+
+    def destroy
+        book = Book.find_by(id: params[:id])
+        if book 
+            if book.destroy!
+                render json: {status: :ok, data: book}
+            else
+                render json: {status: :bad_request, message: book.errors[0]}
+            end
+        else
+            render json: {status: :bad_request, message: "No book was found with the given ID."}
         end
     end
 
